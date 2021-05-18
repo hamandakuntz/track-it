@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Header from "./Header";
 import Menu from "./Menu";
+import trash from "../assets/images/trash.svg";
 
 export default function Habits() {
   return (
@@ -24,6 +25,19 @@ export default function Habits() {
             <SaveButton><span>Salvar</span></SaveButton>
         </ButtonsWrapper>
       </AddNewHabit>
+      <RegisteredHabit>
+          <span>Ler 1 capítulo de livro</span>
+          <img src={trash} alt="deletebutton"></img>
+          <ButtonsWeekdayWrapper2>
+            <ButtonWeekday2><span>D</span></ButtonWeekday2>
+            <ButtonWeekday2><span>S</span></ButtonWeekday2>
+            <ButtonWeekday2><span>T</span></ButtonWeekday2>
+            <ButtonWeekday2><span>Q</span></ButtonWeekday2>
+            <ButtonWeekday2><span>Q</span></ButtonWeekday2>
+            <ButtonWeekday2><span>S</span></ButtonWeekday2>
+            <ButtonWeekday2><span>S</span></ButtonWeekday2>
+        </ButtonsWeekdayWrapper2>
+      </RegisteredHabit>
       <EmptyHabits>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</EmptyHabits>    
       <Menu />      
     </Container>     
@@ -153,4 +167,48 @@ const CancelButton = styled.div`
 
 const ButtonsWrapper= styled.div`
     display: flex;
+`;
+
+const RegisteredHabit = styled.div`
+    width: 340px;
+    height: 91px;
+    background: #FFF;
+    border-radius:5px;
+    margin-top: 5px;    
+    margin-left: 17px;
+    padding: 15px;
+    display: flex;
+    flex-direction: column;   
+    position: relative; 
+
+    span { 
+        color: #666666;
+        font-family: "Lexend Deca";
+        font-size: 20px;
+    }
+
+    img {
+        right: 0;
+        margin-right: 15px;        
+        position: absolute;
+    }
+`;
+
+const ButtonsWeekdayWrapper2 = styled.div`
+    margin-top: 10px;    
+`;
+
+const ButtonWeekday2 = styled.button`
+    width: 30px;
+    height: 30px;       
+    margin-right: 4px;
+    background: #FFFFFF;
+    border: 1px solid #D5D5D5;
+    border-radius: 5px;
+
+    span { 
+        color: #dbdbdb;
+        font-family: "Lexend Deca";
+        font-size: 20px;
+    }
 `;

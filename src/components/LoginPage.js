@@ -2,11 +2,15 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
+import { useContext } from "react";
 import axios from "axios";
 import logo from "../assets/images/iconandlogo.svg";
 import Loader from "react-loader-spinner";
+import UserContext from "../contexts/UserContext";
 
-export default function LoginPage({setToken}) { 
+export default function LoginPage() { 
+  const { user, setUser} = useContext(UserContext);
+
   const history = useHistory();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState(""); 
@@ -23,7 +27,7 @@ export default function LoginPage({setToken}) {
 
     request.then((response) => {
       console.log("deu bom")
-      setToken(response.data.token);
+      setUser(response.data);
       history.push("/habits");
     });
 

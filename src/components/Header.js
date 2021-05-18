@@ -1,11 +1,16 @@
 import styled from "styled-components";
 import logo from "../assets/images/logo.png";
+import { useContext } from "react";
+import UserContext from "../contexts/UserContext";
 
 export default function Header(){
+
+    const { user } = useContext(UserContext);
+
     return (        
         <Container>
             <Image><img src={logo} alt="logo"></img></Image>
-            <UserPicture />
+            <UserPicture><img src={user.image} alt="userimage"></img></UserPicture>
         </Container>
     )
 }
@@ -35,7 +40,14 @@ const Image = styled.div`
 const UserPicture = styled.div`
     width: 50px;
     height: 50px;
-    border-radius: 98.5px;
+    border-radius: 100px;    
     background: white;
-    margin-right: 20px;
-`;
+    margin-right: 20px;    
+
+    img:last-of-type {
+        width: 50px;
+        height: 50px;
+        border-radius: 100px;
+        padding: 0px;
+    }
+`; 
