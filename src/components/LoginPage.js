@@ -24,7 +24,7 @@ export default function LoginPage({setToken}) {
     request.then((response) => {
       console.log("deu bom")
       setToken(response.data.token);
-      history.push("/today");
+      history.push("/habits");
     });
 
     request.catch(() => {
