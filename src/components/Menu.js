@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { Link } from "react-router-dom";
 
 export default function Menu() {
   return (
     <Container>
+        <Link to="/today">
       <ButtonHabits>Hábitos</ButtonHabits>
+      </Link>
       <ProgressbarWrapper>
       <CircularProgressbar
         value={55}

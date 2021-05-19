@@ -2,30 +2,68 @@ import styled from "styled-components";
 import Header from "./Header";
 import Menu from "./Menu";
 import trash from "../assets/images/trash.svg";
+import { useState, useContext } from "react";
+import UserContext from "../contexts/UserContext";
+import axios from "axios";
 
-export default function Habits() {
+export default function Habits({ selected, setSelected, selectedWeekDays, setSelectedWeekDays}) {
+    const { user } = useContext(UserContext);
+    const [clicked, setClicked] = useState(false);      
+    const [habitTitle, setHabitTitle] = useState("");     
+
+    const body = {
+        name: habitTitle,
+        days: selectedWeekDays 
+    }
+
+    function addWeekDays(e, day){            
+        e.stopPropagation();     
+        const newSelectedWeekDays = [...selectedWeekDays, day]    
+        setSelectedWeekDays(newSelectedWeekDays);              
+    }
+
+    function saveHabit(){     
+         
+        const config = {
+            headers: {
+                Authorization: `Bearer ${user.token}`
+            }
+        };          
+        
+        const request = axios.post("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", body, config);        
+        request.then(console.log("sucesso!"))
+        request.catch("falha na requisição!")
+    }
+
+
+    console.log(selectedWeekDays)
+    console.log(user.token)
+
   return (
     <Container>
       <Header />
       <MyHabitsTitle>Meus hábitos</MyHabitsTitle>   
-      <ButtonNewHabit><span>+</span></ButtonNewHabit>
+      <ButtonNewHabit onClick={() => setClicked(true)}><span>+</span></ButtonNewHabit>
+      { clicked ? 
       <AddNewHabit>
-        <input placeholder="nome do hábito"></input>
+        <input value={habitTitle} onChange={(e) => setHabitTitle(e.target.value)}placeholder="nome do hábito"></input>        
         <ButtonsWeekdayWrapper>
-            <ButtonWeekday><span>D</span></ButtonWeekday>
-            <ButtonWeekday><span>S</span></ButtonWeekday>
-            <ButtonWeekday><span>T</span></ButtonWeekday>
-            <ButtonWeekday><span>Q</span></ButtonWeekday>
-            <ButtonWeekday><span>Q</span></ButtonWeekday>
-            <ButtonWeekday><span>S</span></ButtonWeekday>
-            <ButtonWeekday><span>S</span></ButtonWeekday>
-        </ButtonsWeekdayWrapper>
+            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 7)}><span>D</span></ButtonWeekday>
+            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 1)}><span>S</span></ButtonWeekday>
+            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 2)}><span>T</span></ButtonWeekday>
+            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 3)}><span>Q</span></ButtonWeekday>
+            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 4)}><span>Q</span></ButtonWeekday>
+            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 5)}><span>S</span></ButtonWeekday>
+            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 6)}><span>S</span></ButtonWeekday>
+        </ButtonsWeekdayWrapper>        
         <ButtonsWrapper>
             <CancelButton><span>Cancelar</span></CancelButton>
-            <SaveButton><span>Salvar</span></SaveButton>
+            <SaveButton onClick={saveHabit}><span>Salvar</span></SaveButton>
         </ButtonsWrapper>
       </AddNewHabit>
-      <RegisteredHabit>
+    : <EmptyHabits>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</EmptyHabits>}
+      
+      {/* <RegisteredHabit>
           <span>Ler 1 capítulo de livro</span>
           <img src={trash} alt="deletebutton"></img>
           <ButtonsWeekdayWrapper2>
@@ -37,35 +75,28 @@ export default function Habits() {
             <ButtonWeekday2><span>S</span></ButtonWeekday2>
             <ButtonWeekday2><span>S</span></ButtonWeekday2>
         </ButtonsWeekdayWrapper2>
-      </RegisteredHabit>
-      <EmptyHabits>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</EmptyHabits>    
+      </RegisteredHabit> */}
+                
       <Menu />      
     </Container>     
   );
 }
 
 const Container = styled.div`
-  background: #E5E5E5;
-  position: absolute;
-  top: 0;
-  left: 0;  
-  height: 100%;
-  width: 100%;   
+  background: #E5E5E5;      
 `;
 
-const MyHabitsTitle = styled.div`
-    position: absolute;
+const MyHabitsTitle = styled.div`    
     color: #126BA5;
     font-size: 23px;
     margin-top: 100px;
     margin-left: 17px;
 `;
 
-const EmptyHabits = styled.div`
-    position: absolute;
+const EmptyHabits = styled.div`    
     color: #666666;
     font-size: 18px;
-    margin-top: 30px;
+    margin-top: 20px;
     margin-left: 17px;
 `;
 
@@ -118,7 +149,7 @@ const ButtonWeekday = styled.button`
     height: 30px;    
     margin-left: 4px;    
     margin-right: 4px;
-    background: #FFFFFF;
+    background: ${props => props.selected ? "#CFCFCF" : "#FFFFFF"};
     border: 1px solid #D5D5D5;
     border-radius: 5px;
 

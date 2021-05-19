@@ -12,6 +12,8 @@ import UserContext from "./contexts/UserContext";
 
 function App() {
   const [user, setUser] = useState("");
+  const [selectedWeekDays, setSelectedWeekDays] = useState([]);
+  const [selected, setSelected] = useState(false);
 
   return (    
     <UserContext.Provider value={{ user, setUser }}>
@@ -24,7 +26,7 @@ function App() {
             <RegisterPage />
           </Route>
           <Route path="/habits" exact>
-            <Habits />
+            <Habits selected={selected} setSelected={setSelected} selectedWeekDays={selectedWeekDays} setSelectedWeekDays={setSelectedWeekDays}/>
           </Route>
           <Route path="/today" exact>
             <TodayHabits />
