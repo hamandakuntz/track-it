@@ -28,7 +28,7 @@ export default function LoginPage() {
     request.then((response) => {
       console.log("deu bom")
       setUser(response.data);
-      history.push("/habits");
+      history.push("/today");
     });
 
     request.catch(() => {

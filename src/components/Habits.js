@@ -5,8 +5,9 @@ import trash from "../assets/images/trash.svg";
 import { useEffect, useState, useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
+import Loader from "react-loader-spinner";
 
-export default function Habits({ selectedWeekDays, setSelectedWeekDays }) {
+export default function Habits({ selectedWeekDays, setSelectedWeekDays, totalPercentage }) {
   const { user } = useContext(UserContext);
   const [clicked, setClicked] = useState(false);
   const [habitTitle, setHabitTitle] = useState("");
@@ -188,7 +189,7 @@ export default function Habits({ selectedWeekDays, setSelectedWeekDays }) {
             <span>Cancelar</span>
           </CancelButton>
           <SaveButton disabled={loading} onClick={saveHabit}>
-            <span>Salvar</span>
+            <span>{!loading ? "Salvar" : <Loader type="ThreeDots" color="#FFF" height={50} width={45}/>}</span>
           </SaveButton>
         </ButtonsWrapper>
       </AddNewHabit>
@@ -210,7 +211,7 @@ export default function Habits({ selectedWeekDays, setSelectedWeekDays }) {
           </ButtonsWeekdayWrapper2>         
         </RegisteredHabit>
       )) : ""}
-      <Menu />
+      <Menu totalPercentage={user.percentage}/>
     </Container>
   );
 }
@@ -314,7 +315,8 @@ const ButtonsWeekdayWrapper = styled.div`
 
 const SaveButton = styled.button`
   margin-top: 30px;
-  background: #52b6ff;
+  background: #52B6FF;
+  opacity: ${props => props.disabled ? "0.5" : "1"};
   width: 85px;
   height: 35px;
   border-radius: 5px;
@@ -343,6 +345,7 @@ const CancelButton = styled.button`
   font-family: "Lexend Deca";
   background: #fff;
   font-size: 16px;
+  opacity: ${props => props.disabled ? "0.5" : "1"};
 
   span {
     color: #52b6ff;
@@ -354,8 +357,7 @@ const ButtonsWrapper = styled.div`
 `;
 
 const RegisteredHabit = styled.div`
-  width: 340px;
-  height: 91px;
+  width: 340px;  
   background: #fff;
   border-radius: 5px;
   margin-top: 5px;

@@ -12,7 +12,7 @@ import UserContext from "./contexts/UserContext";
 
 function App() {
   const [user, setUser] = useState("");
-  const [selectedWeekDays, setSelectedWeekDays] = useState([]);
+  const [selectedWeekDays, setSelectedWeekDays] = useState([]);  
 
   return (    
     <UserContext.Provider value={{ user, setUser }}>

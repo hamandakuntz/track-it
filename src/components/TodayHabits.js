@@ -10,12 +10,19 @@ import "dayjs/locale/pt";
 import calendar from "dayjs/plugin/calendar";
 
 
-export default function TodayHabits() {
+export default function TodayHabits({ totalPercentage, setTotalPercentage }) {
   dayjs.extend(calendar);
   const { user } = useContext(UserContext);  
   const [listOfHabits, setListOfHabits] = useState([]);  
-  const [selected, setSelected] = useState(false); 
-  
+  const [selected, setSelected] = useState(false);   
+
+  function calculatePercentage() {
+    const percentage2 = listOfHabits.reduce((acc, item) => item.done ? acc+1 : acc, 0);
+    return ((percentage2/listOfHabits.length).toFixed(2)*100)        
+  }
+
+  user.percentage = calculatePercentage();
+
   useEffect(() => {
     const config = {
       headers: {
@@ -37,8 +44,8 @@ export default function TodayHabits() {
     });
   }, []);
 
-  function attStatusHabit(habit, done, habitId) {
-    console.log(habitId)
+  function attStatusHabit(done, habitId) {
+    
 
     const config = {
       headers: {
@@ -48,7 +55,7 @@ export default function TodayHabits() {
     
     const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/${done ? "uncheck" : "check"}`, {}, config);
     request.then(() => attListOfHabits(config));
-    request.catch(() => console.log("falhou"))
+    request.catch(() => console.log("falhou"));      
   }
 
   function attListOfHabits(config) {
@@ -64,26 +71,34 @@ export default function TodayHabits() {
     promise.catch((error) => {
       console.log(error);
     }); 
+    calculatePercentage()
   }
 
   console.log(listOfHabits);
+ 
+  
+
+  console.log(totalPercentage)
+
 
   return (
     <Container>
       <Header />
       <Day>{dayjs().locale("pt").format("dddd").replace("-feira", "")}, {dayjs().calendar(dayjs("2019-09-21"),{sameElse: "DD/MM"})}</Day>
-      <DaySubtitle>{listOfHabits.length}</DaySubtitle>
+      <DaySubtitle className={user.percentage !== 0 ? "exibirVerde" : ""}>
+        {(`${user.percentage}` !== "0") ? `${user.percentage}% dos hábitos concluídos` : "Nenhum hábito concluído ainda"}</DaySubtitle>
       {listOfHabits.map((i) => (
         <Habit key={i.id}>
           <span>{i.name}</span>
-        <Button onClick={() => attStatusHabit(i, i.done, i.id)} done={i.done}><img src={check} alt="check"></img></Button>
+        <Button onClick={() =>           
+          attStatusHabit(i.done, i.id)} done={i.done}><img src={check} alt="check"></img></Button>
           <CardInfo>
-            <Frequency>Sequência atual: x dias</Frequency>
-            <Record>Seu recorde: x dias</Record>
+            <Frequency done={i.done}>Sequência atual: {i.currentSequence === 1 ? `${i.currentSequence} dia`: `${i.currentSequence} dias`}</Frequency>
+            <Record done={i.done}>Seu recorde: {i.highestSequence === i.currentSequence ? `${i.highestSequence}` : ""} {i.highestSequence === 1 ? "dia" : "dias"} </Record>
           </CardInfo>
         </Habit>
       )).reverse()}
-      <Menu />
+      <Menu totalPercentage={user.percentage}/>
     </Container>
   );
 }
@@ -111,6 +126,10 @@ const DaySubtitle = styled.div`
   font-size: 18px;
   margin-top: 130px;
   margin-left: 17px;
+
+  &.exibirVerde {
+    color: #8FC549;
+  }
 `;
 
 const Habit = styled.div`
@@ -135,11 +154,11 @@ const CardInfo = styled.div`
 
 const Frequency = styled.div`
     margin-bottom: 5px;
-    color: #666666;
+    color: ${props => props.done ? "#8FC549" : "#666666"};
 `;
 
 const Record = styled.div`
-    color: #666666;
+    color: ${props => props.done ? "#8FC549" : "#666666"};
 `;
 
 const Button = styled.div`    
@@ -149,7 +168,7 @@ const Button = styled.div`
     width: 70px;
     height: 70px;
     margin: 10px;
-    background: ${props => props.done ? 'green' : "#EBEBEB"};
+    background: ${props => props.done ? "#8FC549" : "#EBEBEB"};
     border: 1px solid #E7E7E7;    
     border-radius: 5px;
     display: flex;
@@ -157,9 +176,7 @@ const Button = styled.div`
     justify-content: center;
 
     img {
-        width: 35px;
-        height: 28px;
-        
+      width: 35px;
+      height: 28px;        
     }
-
 `;
