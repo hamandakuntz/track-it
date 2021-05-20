@@ -6,7 +6,7 @@ import { useState, useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
 
-export default function Habits({ selected, setSelected, selectedWeekDays, setSelectedWeekDays}) {
+export default function Habits({ selectedWeekDays, setSelectedWeekDays}) {
     const { user } = useContext(UserContext);
     const [clicked, setClicked] = useState(false);      
     const [habitTitle, setHabitTitle] = useState("");     
@@ -17,9 +17,15 @@ export default function Habits({ selected, setSelected, selectedWeekDays, setSel
     }
 
     function addWeekDays(e, day){            
-        e.stopPropagation();     
-        const newSelectedWeekDays = [...selectedWeekDays, day]    
-        setSelectedWeekDays(newSelectedWeekDays);              
+        e.stopPropagation();  
+        if (selectedWeekDays.includes(day)) {
+            const newSelectedWeekDays = selectedWeekDays.filter((item) => item !== day)
+            setSelectedWeekDays([...newSelectedWeekDays]);
+            
+        } else {
+            const newSelectedWeekDays2 = [...selectedWeekDays, day];    
+            setSelectedWeekDays(newSelectedWeekDays2); 
+        }                     
     }
 
     function saveHabit(){     
@@ -44,26 +50,26 @@ export default function Habits({ selected, setSelected, selectedWeekDays, setSel
       <Header />
       <MyHabitsTitle>Meus hábitos</MyHabitsTitle>   
       <ButtonNewHabit onClick={() => setClicked(true)}><span>+</span></ButtonNewHabit>
-      { clicked ? 
-      <AddNewHabit>
+      
+      <AddNewHabit show={clicked}>
         <input value={habitTitle} onChange={(e) => setHabitTitle(e.target.value)}placeholder="nome do hábito"></input>        
         <ButtonsWeekdayWrapper>
-            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 7)}><span>D</span></ButtonWeekday>
-            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 1)}><span>S</span></ButtonWeekday>
-            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 2)}><span>T</span></ButtonWeekday>
-            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 3)}><span>Q</span></ButtonWeekday>
-            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 4)}><span>Q</span></ButtonWeekday>
-            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 5)}><span>S</span></ButtonWeekday>
-            <ButtonWeekday selected={selected} onClick={(e) => addWeekDays(e, 6)}><span>S</span></ButtonWeekday>
+            <ButtonWeekday className={selectedWeekDays.includes(0) ? "selected" : ""} onClick={(e) => addWeekDays(e, 0)}><span>D</span></ButtonWeekday>
+            <ButtonWeekday className={selectedWeekDays.includes(1) ? "selected" : ""} onClick={(e) => addWeekDays(e, 1)}><span>S</span></ButtonWeekday>
+            <ButtonWeekday className={selectedWeekDays.includes(2) ? "selected" : ""} onClick={(e) => addWeekDays(e, 2)}><span>T</span></ButtonWeekday>
+            <ButtonWeekday className={selectedWeekDays.includes(3) ? "selected" : ""} onClick={(e) => addWeekDays(e, 3)}><span>Q</span></ButtonWeekday>
+            <ButtonWeekday className={selectedWeekDays.includes(4) ? "selected" : ""} onClick={(e) => addWeekDays(e, 4)}><span>Q</span></ButtonWeekday>
+            <ButtonWeekday className={selectedWeekDays.includes(5) ? "selected" : ""} onClick={(e) => addWeekDays(e, 5)}><span>S</span></ButtonWeekday>
+            <ButtonWeekday className={selectedWeekDays.includes(6) ? "selected" : ""} onClick={(e) => addWeekDays(e, 6)}><span>S</span></ButtonWeekday>
         </ButtonsWeekdayWrapper>        
         <ButtonsWrapper>
-            <CancelButton><span>Cancelar</span></CancelButton>
+            <CancelButton onClick={() => setClicked(false)}><span>Cancelar</span></CancelButton>
             <SaveButton onClick={saveHabit}><span>Salvar</span></SaveButton>
         </ButtonsWrapper>
       </AddNewHabit>
-    : <EmptyHabits>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</EmptyHabits>}
+        <EmptyHabits>Você não tem nenhum hábito cadastrado ainda. Adicione um hábito para começar a trackear!</EmptyHabits>
       
-      {/* <RegisteredHabit>
+       <RegisteredHabit>           
           <span>Ler 1 capítulo de livro</span>
           <img src={trash} alt="deletebutton"></img>
           <ButtonsWeekdayWrapper2>
@@ -75,7 +81,7 @@ export default function Habits({ selected, setSelected, selectedWeekDays, setSel
             <ButtonWeekday2><span>S</span></ButtonWeekday2>
             <ButtonWeekday2><span>S</span></ButtonWeekday2>
         </ButtonsWeekdayWrapper2>
-      </RegisteredHabit> */}
+      </RegisteredHabit> 
                 
       <Menu />      
     </Container>     
@@ -83,14 +89,15 @@ export default function Habits({ selected, setSelected, selectedWeekDays, setSel
 }
 
 const Container = styled.div`
-  background: #E5E5E5;      
+  background: #E5E5E5;  
+  height: 100vh;    
 `;
 
 const MyHabitsTitle = styled.div`    
     color: #126BA5;
     font-size: 23px;
-    margin-top: 100px;
-    margin-left: 17px;
+    padding-top: 100px;
+    padding-left: 17px;
 `;
 
 const EmptyHabits = styled.div`    
@@ -114,7 +121,7 @@ const ButtonNewHabit = styled.button`
     border-radius: 4.63636px;
 
     span {
-        color: #fff;
+        color: #FFF;
         font-size: 30px;
     }
 `;
@@ -124,8 +131,10 @@ const AddNewHabit = styled.div`
     height: 180px;
     background: #FFF;
     border-radius:5px;
-    margin-top: 147px;
+    margin-top: 20px;
     margin-left: 17px;
+    display: ${(props) => (props.show === true ? "flex" : "none")};
+    flex-direction: column;
 
     input {
       width: 303px;
@@ -148,10 +157,15 @@ const ButtonWeekday = styled.button`
     width: 30px;
     height: 30px;    
     margin-left: 4px;    
-    margin-right: 4px;
-    background: ${props => props.selected ? "#CFCFCF" : "#FFFFFF"};
+    margin-right: 4px;    
+    background: #fff;
     border: 1px solid #D5D5D5;
     border-radius: 5px;
+
+    &.selected {
+        background: gray;
+        color: #fff;
+    }
 
     span { 
         color: #dbdbdb;
@@ -178,7 +192,6 @@ const SaveButton = styled.div`
         color: white;
         font-size: 16px;        
     }
-
 `;
 
 const CancelButton = styled.div`
@@ -243,3 +256,4 @@ const ButtonWeekday2 = styled.button`
         font-size: 20px;
     }
 `;
+
