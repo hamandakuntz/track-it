@@ -5,11 +5,18 @@ import axios from "axios";
 import { useEffect, useState, useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import check from "../assets/images/check.svg";
+import dayjs from "dayjs";
+import "dayjs/locale/pt";
+import calendar from "dayjs/plugin/calendar";
+
 
 export default function TodayHabits() {
-  const { user } = useContext(UserContext);
-  const [listOfHabits, setListOfHabits] = useState([]);
-
+  dayjs.extend(calendar);
+  const { user } = useContext(UserContext);  
+  const [listOfHabits, setListOfHabits] = useState([]);  
+  const [selected, setSelected] = useState(false);
+  const [percentageOfDoneHabits, setPercentageOfDoneHabits] = useState([]);
+  
   useEffect(() => {
     const config = {
       headers: {
@@ -18,7 +25,7 @@ export default function TodayHabits() {
     };
 
     const request = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
       config
     );
     request.then((response) => {
@@ -31,17 +38,49 @@ export default function TodayHabits() {
     });
   }, []);
 
+  function attStatusHabit(done, habitId) {
+    console.log(habitId)
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+
+    done ? setPercentageOfDoneHabits(...percentageOfDoneHabits, )
+
+    const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/${done ? "uncheck" : "check"}`, {}, config);
+    request.then(() => attListOfHabits(config));
+    request.catch(() => console.log("falhou"))
+  }
+
+  function attListOfHabits(config) {
+    const promise = axios.get(
+      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
+      config
+    );
+    promise.then((response) => {
+      setListOfHabits(response.data);
+      console.log(response.data);
+    });
+
+    promise.catch((error) => {
+      console.log(error);
+    }); 
+  }
+
+
   console.log(listOfHabits);
 
   return (
     <Container>
       <Header />
-      <Day>Segunda, 17/05</Day>
+      <Day>{dayjs().locale("pt").format("dddd").replace("-feira", "")}, {dayjs().calendar(dayjs("2019-09-21"),{sameElse: "DD/MM"})}</Day>
       <DaySubtitle>Nenhum hábito concluído ainda</DaySubtitle>
       {listOfHabits.map((i) => (
         <Habit key={i.id}>
           <span>{i.name}</span>
-          <Button><img src={check} alt="check"></img></Button>
+        <Button onClick={() => attStatusHabit(i.done, i.id)} done={i.done}><img src={check} alt="check"></img></Button>
           <CardInfo>
             <Frequency>Sequência atual: x dias</Frequency>
             <Record>Seu recorde: x dias</Record>
@@ -106,15 +145,14 @@ const Record = styled.div`
     color: #666666;
 `;
 
-const Button = styled.div`
-    background-color: green;
+const Button = styled.div`    
     position: absolute;
     top: 0;
     right: 0;
     width: 70px;
     height: 70px;
     margin: 10px;
-    background: #EBEBEB;
+    background: ${props => props.done ? 'green' : "#EBEBEB"};
     border: 1px solid #E7E7E7;    
     border-radius: 5px;
     display: flex;

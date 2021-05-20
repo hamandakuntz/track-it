@@ -23,7 +23,7 @@ function App() {
           </Route>
           <Route path="/register" exact>
             <RegisterPage />
-          </Route>
+          </Route>          
           <Route path="/habits" exact>
             <Habits selectedWeekDays={selectedWeekDays} setSelectedWeekDays={setSelectedWeekDays}/>
           </Route>
