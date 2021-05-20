@@ -14,8 +14,7 @@ export default function TodayHabits() {
   dayjs.extend(calendar);
   const { user } = useContext(UserContext);  
   const [listOfHabits, setListOfHabits] = useState([]);  
-  const [selected, setSelected] = useState(false);
-  const [percentageOfDoneHabits, setPercentageOfDoneHabits] = useState([]);
+  const [selected, setSelected] = useState(false); 
   
   useEffect(() => {
     const config = {
@@ -38,7 +37,7 @@ export default function TodayHabits() {
     });
   }, []);
 
-  function attStatusHabit(done, habitId) {
+  function attStatusHabit(habit, done, habitId) {
     console.log(habitId)
 
     const config = {
@@ -46,9 +45,7 @@ export default function TodayHabits() {
         Authorization: `Bearer ${user.token}`,
       },
     };
-
-    done ? setPercentageOfDoneHabits(...percentageOfDoneHabits, )
-
+    
     const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/${done ? "uncheck" : "check"}`, {}, config);
     request.then(() => attListOfHabits(config));
     request.catch(() => console.log("falhou"))
@@ -69,24 +66,23 @@ export default function TodayHabits() {
     }); 
   }
 
-
   console.log(listOfHabits);
 
   return (
     <Container>
       <Header />
       <Day>{dayjs().locale("pt").format("dddd").replace("-feira", "")}, {dayjs().calendar(dayjs("2019-09-21"),{sameElse: "DD/MM"})}</Day>
-      <DaySubtitle>Nenhum hábito concluído ainda</DaySubtitle>
+      <DaySubtitle>{listOfHabits.length}</DaySubtitle>
       {listOfHabits.map((i) => (
         <Habit key={i.id}>
           <span>{i.name}</span>
-        <Button onClick={() => attStatusHabit(i.done, i.id)} done={i.done}><img src={check} alt="check"></img></Button>
+        <Button onClick={() => attStatusHabit(i, i.done, i.id)} done={i.done}><img src={check} alt="check"></img></Button>
           <CardInfo>
             <Frequency>Sequência atual: x dias</Frequency>
             <Record>Seu recorde: x dias</Record>
           </CardInfo>
         </Habit>
-      ))}
+      )).reverse()}
       <Menu />
     </Container>
   );
@@ -99,6 +95,7 @@ const Container = styled.div`
   left: 0;
   min-height: 100vh;
   width: 100vw;
+  padding-bottom: 130px;
 `;
 
 const Day = styled.div`
