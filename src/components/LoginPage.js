@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useState } from "react";
 import { useContext } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import logo from "../assets/images/iconandlogo.svg";
 import Loader from "react-loader-spinner";
@@ -16,16 +17,19 @@ export default function LoginPage() {
   const [isDisabled, setIsDisabled] = useState(false);
   const data = JSON.parse(localStorage.getItem("usertoken"));
 
-  if (user !== "") {
-    localStorage.setItem("usertoken", JSON.stringify(user));
-  }
+  useEffect(() => {   
+    if (user !== "") {
+      localStorage.setItem("usertoken", JSON.stringify(user));
+    }  
+    if (!data) {
+      history.push("/");    
+    } else {  
+      setUser({ ...data });
+      history.push("/today");
+    }  
+  }, [user]);
 
-  if (!data) {
-    history.push("/");    
-  } else {  
-    setUser({ ...data });
-    history.push("/today");
-  }
+
 
   function login() {
     const body = { email, password };
