@@ -21,7 +21,11 @@ export default function TodayHabits({ totalPercentage, setTotalPercentage }) {
     return ((percentage2/listOfHabits.length).toFixed(2)*100)        
   }
 
-  user.percentage = calculatePercentage();
+  if (user !== "") {
+    user.percentage = calculatePercentage()    
+  }
+
+  console.log(user)
 
   useEffect(() => {
     const config = {
@@ -85,8 +89,9 @@ export default function TodayHabits({ totalPercentage, setTotalPercentage }) {
     <Container>
       <Header />
       <Day>{dayjs().locale("pt").format("dddd").replace("-feira", "")}, {dayjs().calendar(dayjs("2019-09-21"),{sameElse: "DD/MM"})}</Day>
+      {listOfHabits.length !== 0 ? 
       <DaySubtitle className={user.percentage !== 0 ? "exibirVerde" : ""}>
-        {(`${user.percentage}` !== "0") ? `${user.percentage}% dos hábitos concluídos` : "Nenhum hábito concluído ainda"}</DaySubtitle>
+        {user.percentage !== 0 ? `${user.percentage}% dos hábitos concluídos` : "Nenhum hábito concluído ainda"}</DaySubtitle> : <DaySubtitle>Nenhum hábito concluído ainda</DaySubtitle>}
       {listOfHabits.map((i) => (
         <Habit key={i.id}>
           <span>{i.name}</span>
@@ -133,11 +138,11 @@ const DaySubtitle = styled.div`
 `;
 
 const Habit = styled.div`
-  width: 340px;
+  max-width: 340px;
   height: 94px;
   background: #fff;
   border-radius: 5px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-left: 17px;
   padding: 15px;
   position: relative;
@@ -146,6 +151,12 @@ const Habit = styled.div`
     color: #666666;
     font-size: 20px;
   }
+
+  @media(max-width: 320px) {
+    margin-right: 10px;
+    margin-left: 10px;
+  }
+
 `;
 
 const CardInfo = styled.div`

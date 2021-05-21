@@ -24,8 +24,7 @@ export default function RegisterPage() {
 
     setIsDisabled(true);
 
-    request.then((response) => {
-      console.log("deu bom!");
+    request.then((response) => {      
       history.push("/");
     });
 
@@ -111,6 +110,7 @@ const InputWrapper = styled.div`
     border: 1px solid #d5d5d5;
     border-radius: 5px;
     margin-bottom: 8px;
+    font-family: "Lexend Deca";
 
     ::placeholder {
       font-family: "Lexend Deca";

@@ -7,7 +7,7 @@ import UserContext from "../contexts/UserContext";
 import axios from "axios";
 import Loader from "react-loader-spinner";
 
-export default function Habits({ selectedWeekDays, setSelectedWeekDays, totalPercentage }) {
+export default function Habits({ selectedWeekDays, setSelectedWeekDays }) {
   const { user } = useContext(UserContext);
   const [clicked, setClicked] = useState(false);
   const [habitTitle, setHabitTitle] = useState("");
@@ -39,7 +39,10 @@ export default function Habits({ selectedWeekDays, setSelectedWeekDays, totalPer
     request.catch((error) => {
       console.log(error);
     });
+    
   }, [user.token]);
+
+  
 
   function addWeekDays(e, day) {
 
@@ -221,6 +224,10 @@ const Container = styled.div`
   min-height: 100vh;
   width: 100vw;  
   padding-bottom: 80px;
+
+  @media(max-width: 320px) {
+    padding-bottom: 130px;
+  }
 `;
 
 const MyHabitsTitle = styled.div`
@@ -234,7 +241,7 @@ const MyHabitsTitle = styled.div`
 const EmptyHabits = styled.div`
   color: #666666;
   font-size: 18px;
-  margin-top: 20px;
+  margin-top: 10px;
   margin-left: 17px;
 `;
 
@@ -357,10 +364,10 @@ const ButtonsWrapper = styled.div`
 `;
 
 const RegisteredHabit = styled.div`
-  width: 340px;  
+  max-width: 340px;  
   background: #fff;
   border-radius: 5px;
-  margin-top: 5px;
+  margin-top: 10px;
   margin-left: 17px;
   padding: 15px;
   display: flex;
@@ -377,6 +384,11 @@ const RegisteredHabit = styled.div`
     right: 0;
     margin-right: 15px;
     position: absolute;
+  }
+
+  @media(max-width: 320px) {
+    margin-right: 10px;
+    margin-left: 10px;
   }
 `;
 

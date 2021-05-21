@@ -18,7 +18,7 @@ export default function Header(){
 const Container = styled.div`
   background: #126BA5;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.15);
-  width: 100%;
+  width: 100vw;
   height: 70px;
   display: flex;
   align-items: center;
@@ -35,7 +35,7 @@ const Container = styled.div`
 
 const Image = styled.div`
     width: 97px;
-    height: 49px;
+    height: 49px;    
 `;
 
 const UserPicture = styled.div`
@@ -43,10 +43,13 @@ const UserPicture = styled.div`
     height: 50px;
     border-radius: 100px;    
     background: white;
-    margin-right: 20px;    
+    margin-right: 20px;  
+    overflow: hidden; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-    img:last-of-type {
-        width: 50px;
+    img:last-of-type {       
         height: 50px;
         border-radius: 100px;
         padding: 0px;

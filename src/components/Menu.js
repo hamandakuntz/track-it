@@ -12,7 +12,7 @@ export default function Menu({totalPercentage}) {
       </Link>
       <Link to="/today">
         <ProgressbarWrapper>
-          <CircularProgressbar
+          <CircularProgressbar            
             value={totalPercentage}
             text="Hoje"
             background
@@ -26,7 +26,7 @@ export default function Menu({totalPercentage}) {
           />
         </ProgressbarWrapper>
       </Link>
-      <Link to="/history">
+      <Link to="/history" params={{ totalPercentage }}>
         <ButtonHistory>Histórico</ButtonHistory>
       </Link>
     </Container>
@@ -35,7 +35,7 @@ export default function Menu({totalPercentage}) {
 
 const Container = styled.div`
   background: #ffffff;
-  width: 100%;
+  width: 100vw;
   height: 70px;
   display: flex;
   align-items: center;

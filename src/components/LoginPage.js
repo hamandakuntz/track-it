@@ -8,13 +8,24 @@ import logo from "../assets/images/iconandlogo.svg";
 import Loader from "react-loader-spinner";
 import UserContext from "../contexts/UserContext";
 
-export default function LoginPage() { 
-  const { user, setUser} = useContext(UserContext);
-
+export default function LoginPage() {
+  const { user, setUser } = useContext(UserContext);
   const history = useHistory();
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState(""); 
-  const [isDisabled, setIsDisabled] = useState(false);  
+  const [password, setPassword] = useState("");
+  const [isDisabled, setIsDisabled] = useState(false);
+  const data = JSON.parse(localStorage.getItem("usertoken"));
+
+  if (user !== "") {
+    localStorage.setItem("usertoken", JSON.stringify(user));
+  }
+
+  if (!data) {
+    history.push("/");    
+  } else {  
+    setUser({ ...data });
+    history.push("/today");
+  }
 
   function login() {
     const body = { email, password };
@@ -25,8 +36,7 @@ export default function LoginPage() {
 
     setIsDisabled(true);
 
-    request.then((response) => {
-      console.log("deu bom")
+    request.then((response) => {      
       setUser(response.data);
       history.push("/today");
     });
@@ -36,19 +46,36 @@ export default function LoginPage() {
       setIsDisabled(false);
     });
   }
-   
+
   return (
-    
     <Container>
       <img src={logo}></img>
       <InputWrapper>
-        <input type="email" placeholder="email" value={email} onChange={e => setEmail(e.target.value)} disabled={isDisabled}/>
+        <input
+          type="email"
+          placeholder="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={isDisabled}
+        />
       </InputWrapper>
       <InputWrapper>
-        <input type="password" placeholder="senha" value={password} onChange={p => setPassword(p.target.value)} disabled={isDisabled}/>
+        <input
+          type="password"
+          placeholder="senha"
+          value={password}
+          onChange={(p) => setPassword(p.target.value)}
+          disabled={isDisabled}
+        />
       </InputWrapper>
       <Button isDisabled={isDisabled} onClick={login}>
-        <span>{!isDisabled ? "Entrar" : <Loader type="ThreeDots" color="#FFF" height={45} width={50}/>}</span>
+        <span>
+          {!isDisabled ? (
+            "Entrar"
+          ) : (
+            <Loader type="ThreeDots" color="#FFF" height={45} width={50} />
+          )}
+        </span>
       </Button>
       <Link to="/register">
         <ButtonLogin>
@@ -56,7 +83,6 @@ export default function LoginPage() {
         </ButtonLogin>
       </Link>
     </Container>
-    
   );
 }
 
@@ -84,6 +110,7 @@ const InputWrapper = styled.div`
     border: 1px solid #d5d5d5;
     border-radius: 5px;
     margin-bottom: 8px;
+    font-family: "Lexend Deca";
 
     ::placeholder {
       font-family: "Lexend Deca";
@@ -106,7 +133,7 @@ const Button = styled.button`
   border: none;
   width: 303px;
   height: 45px;
-  opacity: ${props => props.isDisabled ? 0.5 : 1}; 
+  opacity: ${(props) => (props.isDisabled ? 0.5 : 1)};
 
   span {
     color: #ffffff;
