@@ -8,14 +8,10 @@ import UserContext from "../contexts/UserContext";
 import axios from "axios";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
-import calendar from "dayjs/plugin/calendar";
 
-
-export default function History() {
-  const [value, onChange] = useState(new Date());
+export default function History() {  
   const { user } = useContext(UserContext);
-  const [historyOfHabits, setHistoryOfHabits] = useState([]);
-  const currentDay = dayjs().locale("pt-br").format("dddd, DD/MM");
+  const [historyOfHabits, setHistoryOfHabits] = useState([]); 
   
   useEffect(() => {
       const config = {

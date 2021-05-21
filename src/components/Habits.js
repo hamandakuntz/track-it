@@ -6,7 +6,6 @@ import { useEffect, useState, useContext } from "react";
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
 import Loader from "react-loader-spinner";
-import AddCardNewHabit from "./AddNewHabit";
 
 export default function Habits({ selectedWeekDays, setSelectedWeekDays }) {
   const { user } = useContext(UserContext);
