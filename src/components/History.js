@@ -6,21 +6,19 @@ import 'react-calendar/dist/Calendar.css';
 import { useContext, useState, useEffect} from "react";
 import UserContext from "../contexts/UserContext";
 import axios from "axios";
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
+import calendar from "dayjs/plugin/calendar";
+
 
 export default function History() {
+  const [value, onChange] = useState(new Date());
   const { user } = useContext(UserContext);
   const [historyOfHabits, setHistoryOfHabits] = useState([]);
-
-  function calculatePercentage() {
-    const percentage2 = historyOfHabits.reduce((acc, item) => item.done ? acc+1 : acc, 0);
-    return ((percentage2/historyOfHabits.length).toFixed(2)*100)        
-  }
-  console.log(user.percentage)
-
-  console.log(calculatePercentage())
-
+  const currentDay = dayjs().locale("pt-br").format("dddd, DD/MM");
+  
   useEffect(() => {
-    const config = {
+      const config = {
       headers: {
         Authorization: `Bearer ${user.token}`,
       },
@@ -31,21 +29,41 @@ export default function History() {
       config
     );
     request.then((response) => {
-      setHistoryOfHabits(response.data);
-      console.log(response.data);
+      setHistoryOfHabits(historyOfHabits);      
+
     });
 
     request.catch((error) => {
-      console.log(error);
+      alert("Ocorreu um erro ao carregar o seu histórico de hábitos. Tente novamente.");
     });
     
   }, [user.token]);
+  
+  function tileClassName({ date, view }) {          
+    if (view === 'month') {        
+        for (let i = 0; i < historyOfHabits.length; i++) {
+          if (historyOfHabits[i].day === 
+            dayjs(date).format('DD/MM/YYYY')) {                 
+            if (historyOfHabits[i].habits.find(d => d.done === false)) {
+              return 'highlight';
+            } else {
+              return 'greenlight';
+            }
+          }        
+        }
+        
+    } 
+  }
+
 
   return (
     <Container>
       <Header user={user}/>
       <Title><span>Histórico</span></Title>
-      <Calendar />
+      <Calendar        
+        calendarType="US"
+        tileClassName={tileClassName}                       
+        />
       <Menu totalPercentage={user.percentage}/>
       </Container>
   );
@@ -63,7 +81,7 @@ const Title = styled.div`
   color: #126ba5;
   font-size: 23px;
   padding-top: 100px;
-  padding-left: 17px;
+  padding-left: 5px;
   padding-bottom: 20px;
 `;
 

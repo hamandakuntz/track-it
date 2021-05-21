@@ -13,8 +13,7 @@ import calendar from "dayjs/plugin/calendar";
 export default function TodayHabits({ totalPercentage, setTotalPercentage }) {
   dayjs.extend(calendar);
   const { user } = useContext(UserContext);  
-  const [listOfHabits, setListOfHabits] = useState([]);  
-  const [selected, setSelected] = useState(false);   
+  const [listOfHabits, setListOfHabits] = useState([]);    
 
   function calculatePercentage() {
     const percentage2 = listOfHabits.reduce((acc, item) => item.done ? acc+1 : acc, 0);
@@ -24,8 +23,6 @@ export default function TodayHabits({ totalPercentage, setTotalPercentage }) {
   if (user !== "") {
     user.percentage = calculatePercentage()    
   }
-
-  console.log(user)
 
   useEffect(() => {
     const config = {
@@ -39,12 +36,11 @@ export default function TodayHabits({ totalPercentage, setTotalPercentage }) {
       config
     );
     request.then((response) => {
-      setListOfHabits(response.data);
-      console.log(response.data);
+      setListOfHabits(response.data);      
     });
 
     request.catch((error) => {
-      console.log(error);
+      alert("Ocorreu um erro ao carregar sua lista de hábitos de hoje. Tente novamente!");
     });
   }, []);
 
@@ -59,7 +55,7 @@ export default function TodayHabits({ totalPercentage, setTotalPercentage }) {
     
     const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/${done ? "uncheck" : "check"}`, {}, config);
     request.then(() => attListOfHabits(config));
-    request.catch(() => console.log("falhou"));      
+    request.catch(() => alert("Ocorreu um erro ao marcar seu hábito como realizado/não realizado. Tente novamente!"));      
   }
 
   function attListOfHabits(config) {
@@ -68,22 +64,14 @@ export default function TodayHabits({ totalPercentage, setTotalPercentage }) {
       config
     );
     promise.then((response) => {
-      setListOfHabits(response.data);
-      console.log(response.data);
+      setListOfHabits(response.data);      
     });
 
     promise.catch((error) => {
-      console.log(error);
+      alert("Ocorreu um erro ao atualizar a sua lista de hábitos! Tente novamente!")
     }); 
     calculatePercentage()
   }
-
-  console.log(listOfHabits);
- 
-  
-
-  console.log(totalPercentage)
-
 
   return (
     <Container>
