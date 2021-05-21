@@ -27,7 +27,7 @@ export default function LoginPage() {
       setUser({ ...data });
       history.push("/today");
     }  
-  }, [user]);
+  }, [user, data, setUser, history]);
 
 
 
@@ -53,7 +53,7 @@ export default function LoginPage() {
 
   return (
     <Container>
-      <img src={logo}></img>
+      <img src={logo} alt="logo"></img>
       <InputWrapper>
         <input
           type="email"

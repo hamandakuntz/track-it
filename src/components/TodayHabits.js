@@ -42,7 +42,7 @@ export default function TodayHabits({ totalPercentage, setTotalPercentage }) {
     request.catch((error) => {
       alert("Ocorreu um erro ao carregar sua lista de hábitos de hoje. Tente novamente!");
     });
-  }, []);
+  }, [user]);
 
   function attStatusHabit(done, habitId) {
     

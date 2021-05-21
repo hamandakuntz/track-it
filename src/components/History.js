@@ -33,7 +33,7 @@ export default function History() {
       alert("Ocorreu um erro ao carregar o seu histórico de hábitos. Tente novamente.");
     });
     
-  }, [user.token]);
+  }, [user, historyOfHabits]);
   
   function tileClassName({ date, view }) {          
     if (view === 'month') {        

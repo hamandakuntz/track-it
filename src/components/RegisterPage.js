@@ -37,7 +37,7 @@ export default function RegisterPage() {
 
   return (
     <Container>
-      <img src={logo}></img>
+      <img src={logo} alt="logo"></img>
       <InputWrapper>
         <input
           type="email"
