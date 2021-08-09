@@ -1,4 +1,4 @@
-# Track It
+# Track It 📈
 
 This project is a very intuitive app to track your habits that helps you to increase your discipline!
 
