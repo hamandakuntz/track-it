@@ -13,7 +13,7 @@ This is an web application which people can track your own habits. Below are the
 - List all habits
 - Add a habit
 - Delete a habit
-- Check a habit as "done"/"undone"
+- Check a habit as done/undone
 - View the month history of sequency of done habits
 
 By using this app any user can learn how they've been using their time and how to be more productive with the time their got.
