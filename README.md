@@ -12,8 +12,9 @@ This is an web application which people can track your own habits. Below are the
 - Login
 - List all habits
 - Add a habit
-- Check a habit as "done"
-- View the month history of frequency of done habits
+- Delete a habit
+- Check a habit as "done"/"undone"
+- View the month history of sequency of done habits
 
 By using this app any user can learn how they've been using their time and how to be more productive with the time their got.
 
