@@ -21,7 +21,7 @@ export default function History() {
     };
 
     const request = axios.get(
-      `${process.env.REACT_APP_API_BASE_URL}history/daily`,
+      `${process.env.REACT_APP_API_BASE_URL}habits/history/daily`,
       config
     );
     request.then((response) => {
