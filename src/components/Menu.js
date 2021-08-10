@@ -3,8 +3,7 @@ import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 import { Link } from "react-router-dom";
 
-export default function Menu({totalPercentage}) {
-  
+export default function Menu({ totalPercentage }) {
   return (
     <Container>
       <Link to="/habits">
@@ -12,7 +11,7 @@ export default function Menu({totalPercentage}) {
       </Link>
       <Link to="/today">
         <ProgressbarWrapper>
-          <CircularProgressbar            
+          <CircularProgressbar
             value={totalPercentage}
             text="Hoje"
             background
