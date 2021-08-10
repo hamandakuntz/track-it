@@ -28,7 +28,7 @@ export default function Habits({ selectedWeekDays, setSelectedWeekDays }) {
     };
 
     const request = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+      `${process.env.REACT_APP_API_BASE_URL}habits`,
       config
     );
 
@@ -76,7 +76,7 @@ export default function Habits({ selectedWeekDays, setSelectedWeekDays }) {
     };
 
     const request = axios.post(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits",
+      `${process.env.REACT_APP_API_BASE_URL}habits`,
       body,
       config
     );
@@ -110,9 +110,9 @@ export default function Habits({ selectedWeekDays, setSelectedWeekDays }) {
         },
     };
 
-    const request = axios.delete(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${id}`, config)
+    const request = axios.delete(`${process.env.REACT_APP_API_BASE_URL}habits/${id}`, config)
     request.then(() => {
-        const promise = axios.get("https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits", config)
+        const promise = axios.get(`${process.env.REACT_APP_API_BASE_URL}habits`, config)
         promise.then((response) => {
             setSavedHabits(response.data)            
         })        

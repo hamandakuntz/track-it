@@ -32,7 +32,7 @@ export default function TodayHabits({ totalPercentage, setTotalPercentage }) {
     };
 
     const request = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
+      `${process.env.REACT_APP_API_BASE_URL}habits/today`,
       config
     );
     request.then((response) => {
@@ -53,14 +53,14 @@ export default function TodayHabits({ totalPercentage, setTotalPercentage }) {
       },
     };
     
-    const request = axios.post(`https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/${habitId}/${done ? "uncheck" : "check"}`, {}, config);
+    const request = axios.post(`${process.env.REACT_APP_API_BASE_URL}habits/${habitId}/${done ? "uncheck" : "check"}`, {}, config);
     request.then(() => attListOfHabits(config));
     request.catch(() => alert("Ocorreu um erro ao marcar seu hábito como realizado/não realizado. Tente novamente!"));      
   }
 
   function attListOfHabits(config) {
     const promise = axios.get(
-      "https://mock-api.bootcamp.respondeai.com.br/api/v2/trackit/habits/today",
+      `${process.env.REACT_APP_API_BASE_URL}habits/today`,
       config
     );
     promise.then((response) => {
