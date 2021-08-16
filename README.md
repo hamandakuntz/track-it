@@ -2,7 +2,9 @@
 
 This project is a very intuitive app to track your habits that helps you to increase your discipline!
 
-Try it out now on https://track-it-five.vercel.app/
+Try it out now on https://track-it-five.vercel.app/ or check the demo below!
+
+
 
 ## About
 
